@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="Ribbon">
+    <meta charset="utf-8">
+    <title>Heartflow Heart Model</title>
+	<script src = "objectArrays.js"></script>
+	<script src = "venitas_006.js"></script>
+	<script src = "arteritas_005.js"></script>
+	<script src = "Auricula_izq_004.js"></script>
+	<script src = "Aorta_003.js"></script>
+	<script src = "Auricula_der_002.js"></script>
+	<script src = "Ventriculos_001.js"></script>
+    <!-- <script src = "ribbon.js"></script> -->
+	<script src = "Main_heart.js"></script>
+	<script src = "Human_heart.js"></script>
+    <script id="vs" type="not-js">
+	    precision highp float;
+      attribute vec3 vpos;
+      attribute vec3 vColor;
+      attribute vec3 vnormal;
+	  
+	  uniform mat4 proj;
+	  uniform mat4 view;
+	  uniform mat4 model;
+	  
+	varying vec3 outNormal;
+    varying vec3 outPos;
+	uniform vec3 cubecolor;
+    uniform mat4 uMVP;
+    uniform mat4 uNormalMatrix;
+	  
+      void main(void) {
+        gl_Position = proj * view * model * vec4(vpos, 1.0);
+		outPos =  (view * model * vec4(vpos, 1.0)).xyz;
+        outNormal = normalize(view * model * vec4(vnormal,0.0)).xyz;
+      }
+    </script>
+
+    <script id="fs" type="not-js">
+	precision highp float;
+    varying vec3 outNormal;
+    varying vec3 outPos;
+    uniform vec3 lightdir;
+    uniform vec3 cubecolor;
+	uniform vec3 fakecolor;
+    uniform vec3 vertexColors;
+	uniform bool uOffscreen;
+    //test color
+	float pulse(float val, float dst) {
+		return floor(mod(val*dst,1.0)+.5);
+	}
+    void main(void) {
+		if (uOffscreen) {
+			gl_FragColor = vec4(fakecolor, 1.0);
+			return;
+		}
+		vec3 color = vec3(1, pulse(outPos.y,10.0),1);
+        vec3 n = normalize(outNormal);
+        vec3 e = normalize(-outPos);
+        vec3 l = normalize(lightdir);
+        vec3 h = normalize(e+l);
+        float diffuse = .5 + .5*abs(dot(outNormal, lightdir));
+        float specular = pow(max(dot(n,h),0.0),2.0);
+        vec3 outColor1 = cubecolor * diffuse;
+        vec3 outColor = cubecolor * specular;
+        //vec3 outColor = color;
+		gl_FragColor = vec4(outColor, 1.0);
+    }
+	  
+    </script>
+	
+	
+	
+	 <script id="vs2" type="not-js">
+	    precision highp float;
+      attribute vec3 vpos;
+      attribute vec3 vColor;
+      attribute vec3 vnormal;
+	  
+	  uniform mat4 proj;
+	  uniform mat4 view;
+	  uniform mat4 model;
+	  
+	varying vec3 outNormal;
+    varying vec3 outPos;
+	uniform vec3 cubecolor;
+    uniform mat4 uMVP;
+    uniform mat4 uNormalMatrix;
+	  
+      void main(void) {
+        gl_Position = proj * view * model * vec4(vpos, 1.0);
+		outPos =  (view * model * vec4(vpos, 1.0)).xyz;
+        outNormal = normalize(view * model * vec4(vnormal,0.0)).xyz;
+      }
+    </script>
+
+    <script id="fs2" type="not-js">
+	precision highp float;
+    varying vec3 outNormal;
+    varying vec3 outPos;
+    uniform vec3 lightdir;
+    uniform vec3 cubecolor;
+    uniform vec3 vertexColors;
+    //test color
+	float pulse(float val, float dst) {
+		return floor(mod(val*dst,1.0)+.5);
+	}
+    void main(void) {
+	vec3 color = vec3(1, pulse(outPos.y,10.0),1);
+        vec3 n = normalize(outNormal);
+        vec3 e = normalize(-outPos);
+        vec3 l = normalize(lightdir);
+        vec3 h = normalize(e+l);
+        float diffuse = .5 + .5*abs(dot(outNormal, lightdir));
+        float specular = pow(max(dot(n,h),0.0),2.0);
+        vec3 outColor1 = cubecolor * diffuse;
+        vec3 outColor = cubecolor * specular;
+        //vec3 outColor = color;
+        gl_FragColor = vec4(outColor, 0.7);
+    }
+	  
+    </script>
+
+</head>
+
+<body onload="start()">
+<article>
+	<h1>Heart model</h1>
+	<p>Click on individual heart parts to isolate it.  
+	Click on background to reset.</p>
+	<p><strong>Note:</strong>Created by Louis Vu using WebGL Pipelines and TWGL helper library</p>
+</article>
+<article>
+	<input type="button" id="myBtn" onclick="myRotation()" value="Stop Rotation"></input>
+	<div id="globalBool" value=0></div>
+	<script>function myRotation(){
+		if (document.getElementById("globalBool").value) {
+			document.getElementById("myBtn").value ="Stop Rotation";
+			document.getElementById("globalBool").value = 0;
+		} else {
+			document.getElementById("myBtn").value ="Rotation";
+			document.getElementById("globalBool").value = 1;
+		}
+	}</script>
+	<h1>Selection: <output id ="heartPart">Heart</output></h1>
+</article>
+<canvas id="mycanvas" width="350" height="350"></canvas><br>
+Rotate around x-axis: <input id="slider1" type="range" min="1" max="359" step=".1"/>
+Rotate around z-axis: <input id="slider2" type="range" min="1" max="359" step=".1"/>
+Zoom: <input id="slider3" type="range" min="-155" max="55" step=".1"/>
+<script src="http://graphics.cs.wisc.edu/JS/twgl-full.min.js"></script>
+
+</body>
+
+</html>
