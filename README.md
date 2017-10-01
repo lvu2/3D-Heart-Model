@@ -8,4 +8,4 @@ Rendered a 3D heart model by using WebGL and TWGL library.
 
 **Lighting** - Implemented Phong light(specualr, diffuse, and ambient) to enhance realism.  Artery and vein are transparent.
 
-**Picking** - Picking object based on object colors.
+**Picking** - Picking object based on object colors to isolate a specific part of the heart.
