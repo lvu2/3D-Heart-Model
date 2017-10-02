@@ -16,7 +16,7 @@ Used a loader authored by a fellow UW alum, Yusef Sohail, that will convert Obj 
 
 ## Lighting
 
-Implementd Phong reflection which is the reflection of light as the sume of three types of reflection: ambient, diffuse, and specular.  Abient is the scattered light present in the scene.  Diffuse lighting is scattered reflections in many directions.  Specular gives the object a mirror-like reflections.
+Implementd Phong reflection which is the reflection of light as the sum of three types of reflection: ambient, diffuse, and specular.  Ambient is scattered light present in scene.  Diffuse lighting is scattered reflections in many directions.  Specular gives the object a mirror-like reflections.
 
 Transparencies of the vein and artery is done by enabling alpha blending and select the interpolative blending function.  The objects were rendered from back-to-front.
 
